@@ -53,7 +53,7 @@ bool Banker::is_safe()
     for(int i = 0; i < pqueue.size(); ++i)
     {
         int cur_thread = pqueue[0];
-        Details &details = PID_func_details[cur_thread];
+        Details &details = PID_func_details.at(cur_thread);
         if(available < details.max_request - details.now_have)
         {
             return false;
@@ -104,7 +104,7 @@ void Banker::set_details(
         if(PID_func_details.count(*t_iter) != 0)
         {
             PID_func_details[*t_iter++].now_have = *have_iter;
-            available_src -= *have_iter--;
+            available_src -= *have_iter++;
         }
         else
         {

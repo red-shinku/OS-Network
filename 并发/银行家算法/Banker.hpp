@@ -60,8 +60,7 @@ struct Details
  *     remove(K&&... pid)：
  *          取消对线程的检查服务。使用可变参数模版。
  *          同时提供对给定实参合法性的检查。若不合法则
- *          忽略。若合法，添加至待删除队列，并从
- *          PID_func_details中移除。
+ *          忽略。若合法，从PID_func_details中移除。
  */
 
 class Banker 
@@ -84,7 +83,7 @@ private:
     [this](const int& PID1, const int& PID2) -> bool{
         auto &p1 = PID_func_details.at(PID1);
         auto &p2 = PID_func_details.at(PID2); 
-        return p1.max_request - p1.now_have > 
+        return p1.max_request - p1.now_have < 
             p2.max_request - p2.now_have;
     };
     DetailsQueue threadlist;
@@ -98,6 +97,7 @@ public:
     void add_thread(int PID, int max_request);
     template<typename... K> void remove(K&&... PID);
 
+    //test method. should be delete in real work
     void set_details(std::vector<int>&, std::vector<int>&);
     bool issafe() { return is_safe(); }
 };
